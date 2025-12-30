@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  pin       String?
+  createdAt DateTime @default(now())
+  
+  contactos  Contacto[]
+  gestiones  Gestion[]
+  eventos    Evento[]
+}
+
+model Contacto {
+  id              String   @id @default(cuid())
+  nombre          String
+  telefono        String
+  email           String?
+  etiquetas       String   @default("[]")
+  nivel           Int      @default(3)
+  ubicacion       String?
+  comoNosConocimos String?
+  notas           String?
+  confidencial    Boolean  @default(false)
+  userId          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user       User      @relation(fields: [userId], references: [id])
+  gestiones  Gestion[]
+  eventos    EventoContacto[]
+  
+  @@index([nombre])
+  @@index([confidencial])
+}
+
+model Gestion {
+  id          String   @id @default(cuid())
+  contactoId  String
+  tipo        String   // apoyo_dado, apoyo_recibido, pendiente
+  descripcion String
+  fecha       DateTime @default(now())
+  estado      String   @default("abierto")
+  notas       String?
+  userId      String
+  createdAt   DateTime @default(now())
+  
+  contacto Contacto @relation(fields: [contactoId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+  
+  @@index([contactoId])
+  @@index([tipo])
+  @@index([estado])
+}
+
+model Evento {
+  id        String   @id @default(cuid())
+  titulo    String
+  fecha     DateTime
+  ubicacion String?
+  notas     String?
+  userId    String
+  createdAt DateTime @default(now())
+  
+  user      User             @relation(fields: [userId], references: [id])
+  contactos EventoContacto[]
+  
+  @@index([fecha])
+}
+
+model EventoContacto {
+  id         String @id @default(cuid())
+  eventoId   String
+  contactoId String
+  
+  evento   Evento   @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  contacto Contacto @relation(fields: [contactoId], references: [id], onDelete: Cascade)
+  
+  @@unique([eventoId, contactoId])
+}
