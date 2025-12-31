@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Contacto {
   id: string;
@@ -37,6 +37,28 @@ const UBICACIONES = ['Jalisco', 'Nayarit', 'CDMX', 'Otro'];
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstall, setShowInstall] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstall(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setShowInstall(false);
+    }
+    setDeferredPrompt(null);
+  };
   const [contactos, setContactos] = useState<Contacto[]>([]);
   const [gestiones, setGestiones] = useState<Gestion[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -156,8 +178,17 @@ export default function HomePage() {
       {/* Header */}
       <header className="bg-white border-b border-stone-200 pt-6 pb-4 px-6">
         <div className="max-w-lg mx-auto text-center">
-          <img src="/logo.png" alt="Conexions" className="h-36 mx-auto mb-3" />
+          <img src="/logo.png" alt="Conexions" className="h-44 mx-auto mb-4" />
           <p className="text-stone-400 text-sm">Conexiones que importan</p>
+          {showInstall && (
+            <button onClick={handleInstall}
+              className="mt-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium hover:from-blue-700 hover:to-blue-800 flex items-center gap-2 mx-auto shadow-lg">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Instalar App
+            </button>
+          )}
         </div>
       </header>
 
