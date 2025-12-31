@@ -156,7 +156,7 @@ export default function HomePage() {
       {/* Header */}
       <header className="bg-white border-b border-stone-200 pt-6 pb-4 px-6">
         <div className="max-w-lg mx-auto text-center">
-          <img src="/logo.png" alt="Conexions" className="h-20 mx-auto mb-2" />
+          <img src="/logo.png" alt="Conexions" className="h-36 mx-auto mb-3" />
           <p className="text-stone-400 text-sm">Conexiones que importan</p>
         </div>
       </header>
