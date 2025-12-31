@@ -156,26 +156,7 @@ export default function HomePage() {
       {/* Header */}
       <header className="bg-white border-b border-stone-200 pt-6 pb-4 px-6">
         <div className="max-w-lg mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="w-14 h-14 bg-gradient-to-br from-blue-900 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="3"/>
-                <circle cx="12" cy="5" r="2"/>
-                <circle cx="19" cy="12" r="2"/>
-                <circle cx="5" cy="12" r="2"/>
-                <circle cx="12" cy="19" r="2"/>
-                <line x1="12" y1="7" x2="12" y2="9"/>
-                <line x1="12" y1="15" x2="12" y2="17"/>
-                <line x1="14" y1="12" x2="17" y2="12"/>
-                <line x1="7" y1="12" x2="10" y2="12"/>
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-2xl font-light tracking-wide text-blue-900">
-                CONEX<span className="font-bold">IONS</span>
-              </h1>
-            </div>
-          </div>
+          <img src="/logo.png" alt="Conexions" className="h-20 mx-auto mb-2" />
           <p className="text-stone-400 text-sm">Conexiones que importan</p>
         </div>
       </header>
